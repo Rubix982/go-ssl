@@ -1,0 +1,12 @@
+# Use a lightweight base image
+FROM alpine:latest
+
+# Install OpenSSL
+RUN apk add --no-cache openssl
+
+# Copy the OCSP responder script and certificates
+COPY ocsp_responder.sh /usr/local/bin/ocsp_responder.sh
+COPY etc/nginx/certs /etc/nginx/certs
+
+# Run the OCSP responder script
+CMD ["/usr/local/bin/ocsp_responder.sh"]

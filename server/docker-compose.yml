@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sui/nginx-ssl-diagnostics:latest  # Set a custom image name and tag
+    container_name: nginx-ssl-diagnostics  # Set a custom container name
+    ports:
+      - "80:80"
+      - "443:443"
+      - "9443:9443"
+      - "9444:9444"
+      - "9445:9445"
+      - "9446:9446"
+    volumes:
+      - ./etc/nginx/certs:/etc/nginx/certs
+      - ./etc/nginx/html:/etc/nginx/html
+    depends_on:
+      - ocsp
+
+  ocsp:
+    build:
+      context: .
+      dockerfile: Dockerfile.ocsp
+    image: sui/nginx-ssl-diagnostics-ocsp:latest
+    container_name: nginx-ssl-diagnostics-ocsp
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./etc/nginx/certs:/etc/nginx/certs
